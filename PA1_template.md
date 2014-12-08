@@ -30,6 +30,8 @@ hist(totalNumStepsByDat$steps, xlab="Total Steps", main="Histogram of Steps")
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
 
+### Mean total number of steps taken per day
+
 ```r
 mean(totalNumStepsByDat$steps)
 ```
@@ -37,6 +39,8 @@ mean(totalNumStepsByDat$steps)
 ```
 ## [1] 10766.19
 ```
+
+### Median total number of steps taken per day
 
 ```r
 median(totalNumStepsByDat$steps)
@@ -55,7 +59,7 @@ fiveMinAvgSteps <- aggregate(steps ~ interval, actRawData, mean)
 plot(fiveMinAvgSteps$interval, fiveMinAvgSteps$steps, type = "l", xlab="Intervals", ylab="Avg. Steps", main="Average Steps Taken") 
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
 ### Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
@@ -78,13 +82,11 @@ sum(is.na(actRawData$steps))
 ```
 ## [1] 2304
 ```
-
-```r
-actUpdData <- actRawData
-```
 ### Replace missing data with the mean for that 5-minute interval 
 
 ```r
+actUpdData <- actRawData
+
 actUpdData[is.na(actUpdData$steps),1] <- subset(fiveMinAvgSteps, interval == interval, select=steps)
 
 totalNumStepsByDatImputted <- aggregate(steps ~ date, actUpdData, sum)
@@ -92,7 +94,9 @@ totalNumStepsByDatImputted <- aggregate(steps ~ date, actUpdData, sum)
 hist(totalNumStepsByDatImputted$steps, xlab="Steps", main="Histogram of Steps (Imputted Data)")
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+
+### Mean total number of steps taken per day (Imputted Data)
 
 ```r
 mean(totalNumStepsByDatImputted$steps)
@@ -101,6 +105,9 @@ mean(totalNumStepsByDatImputted$steps)
 ```
 ## [1] 10766.19
 ```
+
+### Median total number of steps taken per day (Imputted Data)
+
 
 ```r
 median(totalNumStepsByDatImputted$steps)
@@ -123,4 +130,4 @@ fiveMinAvgStepsImputted <- aggregate(steps ~ interval + dayType, actUpdData, mea
 qplot(x=interval, y=steps, data = fiveMinAvgStepsImputted, facets = dayType ~ ., geom="line", xlab="Interval", ylab="Number of Steps")
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
